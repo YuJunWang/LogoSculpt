@@ -27,8 +27,15 @@ import resvg_py
 
 def load_and_normalize_image(input_path: str) -> np.ndarray:
     """
-    安全讀取各類圖片格式（含 GIF 動畫、AVIF、Paletted P 模式），正規化為 RGBA numpy 矩陣
+    安全讀取各類圖片格式（含 SVG 向量、GIF 動畫、AVIF、Paletted P 模式），正規化為 RGBA numpy 矩陣
     """
+    if input_path.lower().endswith(".svg"):
+        with open(input_path, "r", encoding="utf-8", errors="replace") as f:
+            svg_content = f.read()
+        png_bytes = resvg_py.svg_to_bytes(svg_content, width=2048)
+        img = Image.open(io.BytesIO(png_bytes))
+        return np.array(img.convert("RGBA"))
+        
     img = Image.open(input_path)
     
     # 若為多幀動態圖片，定位至第一幀

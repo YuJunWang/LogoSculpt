@@ -1,6 +1,6 @@
 # LogoSculpt
 
-把有雜訊、低解析度或帶有背景的點陣商標（PNG / JPG / WEBP 等），批次轉換為極限貼齊邊界的純白向量 SVG 與 4K 透明 PNG。
+把有雜訊、低解析度、向量或帶有背景的商標（PNG / JPG / SVG / WEBP 等），批次轉換為極限貼齊邊界的純白向量 SVG 與 4K 透明 PNG。
 
 ---
 
@@ -13,7 +13,7 @@ pip install -r requirements.txt
 ```
 
 ### 2. 放入檔案
-把要轉檔的圖片直接丟進 `input/` 資料夾（支援 PNG、JPG、WEBP、AVIF、GIF 等常見格式）。
+把要轉檔的圖片直接丟進 `input/` 資料夾（支援 SVG、PNG、JPG、WEBP、AVIF、GIF 等常見格式）。
 
 ### 3. 執行轉檔
 * **Windows 使用者**：直接點擊 `run.bat`。

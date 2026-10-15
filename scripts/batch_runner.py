@@ -18,7 +18,7 @@ def run_batch(input_dir="input", output_dir="output", fill_color="#FFFFFF", auto
     
     valid_exts = (
         ".png", ".jpg", ".jpeg", ".webp", ".avif", ".gif", 
-        ".bmp", ".tiff", ".tif", ".ico"
+        ".bmp", ".tiff", ".tif", ".ico", ".svg"
     )
     
     all_files = os.listdir(input_dir)
