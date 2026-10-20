@@ -1,81 +1,85 @@
 # LogoSculpt
 
-把有雜訊、低解析度、向量或帶有背景的商標（PNG / JPG / SVG / WEBP 等），批次轉換為極限貼齊邊界的純白向量 SVG 與 4K 透明 PNG。
+**English** | [繁體中文](README.zh-TW.md)
 
 ---
 
-## 快速開始
+Batch convert noisy, low-resolution, or bordered raster logos (PNG, JPG, SVG, WEBP, etc.) into tightly cropped, clean white vector SVGs and transparent 4K PNGs.
 
-### 1. 安裝套件
-需要 Python 3.10+：
+---
+
+## Quick Start
+
+### 1. Install dependencies
+Requires Python 3.10+:
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. 放入檔案
-把要轉檔的圖片直接丟進 `input/` 資料夾（支援 SVG、PNG、JPG、WEBP、AVIF、GIF 等常見格式）。
+### 2. Drop files in
+Put your images directly into the `input/` folder (supports SVG, PNG, JPG, WEBP, AVIF, GIF, etc.).
 
-### 3. 執行轉檔
-* **Windows 使用者**：直接點擊 `run.bat`。
-* **終端機指令**：
+### 3. Run conversion
+* **Windows**: Double-click `run.bat`.
+* **Command line**:
   ```bash
   python convert.py
   ```
 
-### 4. 取得成果
-輸出檔案會放在 `output/` 內，每個商標獨立建夾。直接用瀏覽器打開 `output/preview.html` 即可切換深色背景預覽並下載素材。
+### 4. Grab your outputs
+Processed files are saved in `output/`, organized into folders per logo. Open `output/preview.html` in your browser to preview against dark backgrounds and download assets.
 
 ---
 
-## 常用參數
+## Common CLI Options
 
 ```bash
-# 強制重新處理已轉換過的檔案
+# Force re-process already converted files
 python convert.py --force
 
-# 自訂向量填色（預設純白 #FFFFFF，例如改為品牌金 #FFD700）
+# Custom vector fill color (defaults to pure white #FFFFFF, e.g. brand gold #FFD700)
 python convert.py --color "#FFD700"
 
-# 調整邊界留白間距（預設 2.0px，貼齊內容極限）
+# Adjust edge padding (default 2.0px, tightly cropped)
 python convert.py --padding 3.0
 
-# 停用圖標與文字自動拆分（僅產出組合版）
+# Disable auto-splitting into icon and text (full lockup only)
 python convert.py --no-split
 
-# 自訂來源與輸出路徑
+# Custom input and output paths
 python convert.py -i "/path/to/input" -o "/path/to/output"
 ```
 
 ---
 
-## 它自動處理了哪些爛圖問題？
+## Real-World Edge Cases Solved Automatically
 
-不用進 Illustrator 手動鋼筆描邊，腳本會自動修復常見的來源瑕疵：
+Skip manual pen-tool tracing in Illustrator. The script fixes common raster defects under the hood:
 
-1. **截圖殘留黑邊**：自動偵測外圍 1~2px 裁切黑框並中和，避免背景被誤判為深色或產生額外方框。
-2. **字體發胖與孔洞黏死**：自適應雙峰門檻與透明通道中位線校正，防止英文字母（`A`、`R`、`P`）和繁體字密部筆劃膨脹封閉。
-3. **JPEG 壓縮噪點**：雙邊濾波加上連通面積過濾，清掉背景零碎雜斑，同時保留小寫字母 `i` 的圓點與標點符號。
-4. **實物翻拍與印泥滲透**：色度防護機制，消除印泥陰刻線條內的浮動毛刺。
-5. **彩度漸層保留**：具備 HSV 飽和度感應，明亮彩度漸層（如黃色、青色）不會被誤判為白色背景而消失。
-6. **圖文自動分離**：符合橫式比例的商標自動拆成「完整版」、「獨立圖標 (Icon)」、「獨立標準字 (Text)」。
+1. **Screenshot black borders**: Detects and neutralizes outer 1~2px screenshot lines so backgrounds aren't misread as dark or boxed in.
+2. **Font bloat and closed counters**: Uses dual-peak Otsu and alpha midpoint tuning to stop letters like `A`, `R`, `P` and dense CJK strokes from blowing up and closing shut.
+3. **JPEG compression noise**: Bilateral filtering paired with connected-component area filters cleans stray background specks while keeping punctuation and lowercase `i` dots intact.
+4. **Physical stamps & ink bleed**: Color saturation gating removes fuzzy paper bleed inside hollow stamp grooves.
+5. **Bright gradient preservation**: HSV saturation sensing keeps bright colored accents (yellows, cyans) from vanishing into white backgrounds.
+6. **Auto Icon / Text split**: Wide logos are automatically split into "Full", standalone "Icon", and standalone "Text".
 
 ---
 
-## 產出檔案清單
+## Output Files
 
-每個商標處理後會產出：
+Each logo generates:
 
-| 檔案名稱 | 說明 |
+| File | Description |
 | :--- | :--- |
-| `*_white_full.svg` | 完整向量版（極限貼齊 ViewBox，向量無限放大） |
-| `*_white_full.png` | 原尺寸透明點陣圖（resvg 次像素渲染） |
-| `*_white_full_4k.png` | 4K 超高解析透明點陣圖（長邊 $\ge 4000\text{px}$） |
-| `*_white_icon.svg / .png` | 獨立圖標（長寬比符合且具備間隙時自動產出） |
-| `*_white_text.svg / .png` | 獨立文字（長寬比符合且具備間隙時自動產出） |
-| `output/preview.html` | 離線預覽看板，支援深黑、企業藍、棋盤格底色切換 |
+| `*_white_full.svg` | Full vector asset (tight viewBox, infinitely scalable) |
+| `*_white_full.png` | 1x transparent PNG (resvg subpixel rasterization) |
+| `*_white_full_4k.png` | 4K transparent PNG (longest side >= 4000px) |
+| `*_white_icon.svg / .png` | Standalone icon (when aspect ratio and gap match) |
+| `*_white_text.svg / .png` | Standalone typography (when aspect ratio and gap match) |
+| `output/preview.html` | Offline preview board with dark, navy, and checkerboard toggles |
 
 ---
 
-## 授權
+## License
 
 [MIT License](./LICENSE)
